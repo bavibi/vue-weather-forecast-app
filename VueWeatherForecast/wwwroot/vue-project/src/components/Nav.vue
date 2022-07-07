@@ -15,31 +15,31 @@ const cursor = ref(null as HTMLDivElement | null);
 const nav = ref(null as HTMLElement | null);
 
 let changedRouteOnce = false;
-  watch(() => route.matched, () => {
+watch(() => route.matched, () => {
     if (nav.value != null && cursor.value != null) {
-      const a = nav.value.querySelector(":scope > .active") as HTMLAnchorElement;
-      if (a == null) return;
-      const cur = cursor.value;
-      cur.style.setProperty("--start-width", `${cur.clientWidth}px`);
-      cur.style.setProperty("--start-left", `${cur.offsetLeft}px`);
-      cur.style.setProperty("--end-left", `${a.offsetLeft}px`);
-      cur.style.setProperty("--end-width", `${a.clientWidth}px`);
-      cur.classList.add("initialized");
-      if (changedRouteOnce) {
-        cur.classList.add("anim");
-        cur.addEventListener(
-          "animationend",
-          () => cursor.value?.classList.remove("anim"),
-          { once: true }
-        );
-      }
-      else {
-        changedRouteOnce = true;
-      }
+        const a = nav.value.querySelector(":scope > .active") as HTMLAnchorElement;
+        if (a == null) return;
+        const cur = cursor.value;
+        cur.style.setProperty("--start-width", `${cur.clientWidth}px`);
+        cur.style.setProperty("--start-left", `${cur.offsetLeft}px`);
+        cur.style.setProperty("--end-left", `${a.offsetLeft}px`);
+        cur.style.setProperty("--end-width", `${a.clientWidth}px`);
+        cur.classList.add("initialized");
+
+        // prevent animation from playing when page initally loads
+        if (changedRouteOnce) {
+            cur.classList.remove("anim");
+            // trigger reflow
+            cur.offsetHeight;
+            cur.classList.add("anim");
+        }
+        else {
+            changedRouteOnce = true;
+        }
     }
-  }, {
+}, {
     flush: "post",
-  });
+});
 
 </script>
 
@@ -51,7 +51,6 @@ let changedRouteOnce = false;
 </template>
 
 <style>
-
 nav {
     display: flex;
     flex-direction: row;
@@ -100,7 +99,11 @@ nav>a:not(.active) {
 }
 
 .cursor.anim {
-    animation: change-width 1s ease-out 0s 1;
+    animation-name: change-width;
+    animation-duration: 1s;
+    animation-timing-function: ease-out;
+    animation-iteration-count: 1;
+    animation-fill-mode: forwards;
 }
 
 @keyframes change-width {
@@ -119,5 +122,4 @@ nav>a:not(.active) {
         left: var(--calc-left);
     }
 }
-
 </style>
