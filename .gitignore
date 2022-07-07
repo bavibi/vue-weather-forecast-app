@@ -1,0 +1,6 @@
+/.vs
+/VueWeatherForecast/bin
+/VueWeatherForecast/obj
+/VueWeatherForecast/wwwroot/node_modules
+/VueWeatherForecast/wwwroot/vue-project/.vscode
+/VueWeatherForecast/wwwroot/vue-project/node_modules
