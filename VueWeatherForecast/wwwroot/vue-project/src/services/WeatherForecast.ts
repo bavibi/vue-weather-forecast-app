@@ -13,7 +13,7 @@ const weatherFocecastSchema = z.object({
 
 export type WeatherForecast = z.infer<typeof weatherFocecastSchema>;
 
-const apiUrl = "https://192.168.122.71:5001";
+const apiUrl = import.meta.env.VITE_WEATHER_FORECAST_API_URI;
 
 function transformData() {
 

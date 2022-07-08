@@ -64,15 +64,15 @@ nav {
     align-items: center;
 }
 
-nav>a {
+nav > a {
     text-decoration: none;
     font-weight: bold;
     color: black;
     transition: all 0.5s ease-out;
 }
 
-nav>a:not(.active) {
-    color: var(--grayed-out);
+nav > a:not(.active) {
+    /* color: var(--grayed-out); */
     /* transform: translate(0, +0.25em); */
 }
 
