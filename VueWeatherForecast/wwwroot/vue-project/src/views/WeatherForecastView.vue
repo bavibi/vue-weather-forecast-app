@@ -8,6 +8,7 @@ import { useRoute, useRouter } from 'vue-router';
   const wcast = ref(null as WeatherForecast | null);
   const route = useRoute();
   const wcastIdStr = ref("");
+
   if (typeof route.params.id == "string") {
     wcastIdStr.value = route.params.id;
   }
@@ -38,18 +39,30 @@ import { useRoute, useRouter } from 'vue-router';
     }
   }
 
+  function onInputIdChange(ev: Event) {
+    // basically triggers only when user presses enter
+    if (document.activeElement == ev.target) {
+      onFindBtnClicked(new MouseEvent("click"));
+    }
+  }
+
+  function onFindBtnClicked(ev: MouseEvent) {
+    fetchData();
+  }
+
   if (wcastIdStr.value != "") {
     fetchData();
   }
+  
 </script>
 
 <template>
   <div class="root">
     <label class="form-label">
       Id прогноза:
-      <input type="number" class="form-control" v-model="wcastIdStr">
+      <input type="number" class="form-control" v-model="wcastIdStr" @change="onInputIdChange">
     </label>
-    <button class="btn btn-primary" @click="fetchData">Найти</button>
+    <button class="btn btn-primary" @click="onFindBtnClicked">Найти</button>
     <div v-if="errorMsg" class="alert alert-danger" role="alert">{{errorMsg}}</div>
     <div v-if="wcast != null">
       <div>
